@@ -1,22 +1,31 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+# azure-pipelines.yml
 
+# This pipeline will trigger on every push to the main branch
 trigger:
-- main
+  - main
 
+# Define the pool of agents where this job will run
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest' # Use a Microsoft-hosted Ubuntu agent
 
+# Define the steps (tasks) to be executed in this job
 steps:
-- task: Maven@3
+- script: echo 'Hello, Azure Pipelines!'
+  displayName: 'Echo Hello Message' # A friendly name for the task
+
+- script: |
+    echo "Current directory: $(pwd)"
+    echo "Listing files:"
+    ls -l
+  displayName: 'Show Current Directory and Files'
+
+- bash: |
+    echo "This is a bash script step."
+    MY_VARIABLE="Azure DevOps is cool!"
+    echo "The value of MY_VARIABLE is: $MY_VARIABLE"
+  displayName: 'Run a Bash Script'
+
+- task: CmdLine@2
   inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    script: 'echo This is a command line task on Windows or Linux'
+  displayName: 'Run a Generic Command Line Task'
